@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Medical">
+    <output-path>$PROJECT_DIR$/out/artifacts/Medical</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Medical" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="application" name="Spring-4.3.18.RELEASE" />
+          <element id="library" level="application" name="Spring MVC-4.3.18.RELEASE" />
+          <element id="library" level="project" name="com.google.code.gson:gson:2.8.6" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Medical/web/Web" />
+    </root>
+  </artifact>
+</component>
