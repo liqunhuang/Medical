@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Medical.iml" filepath="$PROJECT_DIR$/Medical.iml" />
+      <module fileurl="file://$PROJECT_DIR$/medical-react/medical-react.iml" filepath="$PROJECT_DIR$/medical-react/medical-react.iml" />
     </modules>
   </component>
 </project>

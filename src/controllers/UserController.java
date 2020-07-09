@@ -6,13 +6,18 @@ import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,73 +29,13 @@ import java.util.Hashtable;
 @Controller
 @RequestMapping(value ={"/user"})
 public class UserController {
-//    @RequestMapping("/login")
-//    public void login(HttpServletRequest request, HttpServletResponse response)
-//    {
-//
-////        ModelAndView view  = new ModelAndView("/login.jsp");
-////        return view;
-//
-//        Hashtable ht = new Hashtable();
-//        ht.put("success",false);
-//        ht.put("message","Login failed!");
-//        Gson gson = new Gson();
-//        String username = request.getParameter("username");
-//        String password = request.getParameter("password");
-//        if(username==null || password==null)
-//        {
-//            ht.replace("success",false);
-//            ht.replace("message","参数错误");
-//        }
-//        else {
-//            if (username.isEmpty() || password.isEmpty()) {
-//                ht.replace("success",false);
-//                ht.replace("message","用户名和密码不能为空");
-//            }
-//            else
-//            {
-//                try {
-//                    //查数据 库
-//                    User user =  DBHelper.getUser(username);
-//                    if(user.getUsername()==null || user.getUsername().isEmpty())
-//                    {
-//                        ht.replace("success",false);
-//                        ht.replace("message","User not exist");
-//                    }
-//                    else
-//                    {
-//                        if(user.getPassword().equals(password))
-//                        {
-//                            ht.replace("success",true);
-//                            ht.replace("message","Login OK");
-//                            //  Set Session
-//                        }
-//                        else
-//                        {
-//                            ht.replace("success",false);
-//                            ht.replace("message","Password Error");
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//            }
-//            }
-//        }
-//        try {
-//            String result = gson.toJson(ht);
-//            response.getWriter().write(result);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     @RequestMapping(value = {"/login"})
     public void login(User user, HttpSession session, HttpServletResponse response)
     {
         Hashtable ht = new Hashtable();
         ht.put("success",false);
-        ht.put("message","Login failed!");
+        ht.put("msg","Login failed!");
         Gson gson = new Gson();
 
         String username = user.getUsername();
@@ -98,12 +43,12 @@ public class UserController {
         if(username==null || password==null)
         {
             ht.replace("success",false);
-            ht.replace("message","参数错误");
+            ht.replace("msg","参数错误");
         }
         else {
             if (username.isEmpty() || password.isEmpty()) {
                 ht.replace("success",false);
-                ht.replace("message","用户名和密码不能为空");
+                ht.replace("msg","用户名和密码不能为空");
             }
             else
             {
@@ -113,21 +58,21 @@ public class UserController {
                     if(userDb.getUsername()==null || userDb.getUsername().isEmpty())
                     {
                         ht.replace("success",false);
-                        ht.replace("message","User not exist");
+                        ht.replace("msg","User not exist");
                     }
                     else
                     {
                         if(userDb.getPassword().equals(password))
                         {
                             ht.replace("success",true);
-                            ht.replace("message","Login OK");
+                            ht.replace("msg","Login OK");
                             //  Set Session
                             session.setAttribute("user",userDb);
                         }
                         else
                         {
                             ht.replace("success",false);
-                            ht.replace("message","Password Error");
+                            ht.replace("msg","Password Error");
                         }
                     }
                 } catch (Exception e) {
@@ -152,7 +97,7 @@ public class UserController {
     {
         Hashtable ht = new Hashtable();
         ht.put("success",false);
-        ht.put("message","");
+        ht.put("msg","");
         Gson gson = new Gson();
         response.setContentType("text/html;charset=utf-8");
         try
@@ -160,7 +105,7 @@ public class UserController {
             if(null == session.getAttribute("user"))   //未登录，
             {
                 ht.replace("success",false);
-                ht.replace("message","用户未登录，请先登录。");
+                ht.replace("msg","用户未登录，请先登录。");
                 response.getWriter().write(gson.toJson(ht));
                 return;
             }
@@ -170,21 +115,21 @@ public class UserController {
                 if(DBHelper.isUserExist(userinfo.getUsername()))
                 {
                     ht.replace("success",false);
-                    ht.replace("message","该用户已存在，请重试。");
+                    ht.replace("msg","该用户已存在，请重试。");
                     response.getWriter().write(gson.toJson(ht));
                     return;
                 }
                 if(DBHelper.addUser(userinfo))
                 {
                     ht.replace("success",true);
-                    ht.replace("message","添加用户成功。");
+                    ht.replace("msg","添加用户成功。");
                     response.getWriter().write(gson.toJson(ht));
                     return;
                 }
                 else
                 {
                     ht.replace("success",false);
-                    ht.replace("message","添加用户失败，请重试。");
+                    ht.replace("msg","添加用户失败，请重试。");
                     response.getWriter().write(gson.toJson(ht));
                     return;
                 }
@@ -193,7 +138,7 @@ public class UserController {
         catch (Exception e)
         {
             ht.replace("success",false);
-            ht.replace("message","添加用户失败，请重试。");
+            ht.replace("msg","添加用户失败，请重试。");
             try {
                 response.getWriter().write(gson.toJson(ht));
             } catch (IOException ex) {
@@ -202,4 +147,246 @@ public class UserController {
             return;
         }
     }
+
+//    @RequestMapping(value={"/usermgr"})
+//    public ModelAndView userMgr(User userinfo,HttpSession session)
+//    {
+//        boolean succ = false;
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("success", succ);
+//        map.put("msg","");
+//        MappingJackson2JsonView retJson = new MappingJackson2JsonView();
+//        try
+//        {
+//            if (userinfo != null) {
+//                map.replace("success",false);
+//                map.replace("msg","User information parameters error.");
+//            } else {
+//                //assert userinfo != null;
+//                String operation = userinfo.getOpt();
+//                if(operation.isEmpty())
+//                {
+//                    map.replace("success",false);
+//                    map.replace("msg","Opt parameters error.");
+//                }
+//                else
+//                {
+//                    switch (operation)
+//                    {
+//                        case "add":
+//                            // do add user
+//                            if(DBHelper.addUser(userinfo))
+//                            {
+//                                map.replace("success",true);
+//                                map.replace("msg","Add userinfo successfully.");
+//                            }
+//                            else
+//                            {
+//                                map.replace("success",false);
+//                                map.replace("msg","Add userinfo failed.");
+//                            }
+//                            break;
+//                        case "del":
+//                            //do delete user
+//                            if(DBHelper.deleteUser(userinfo))
+//                            {
+//                                map.replace("success",true);
+//                                map.replace("msg","Delete userinfo successfully.");
+//                            }
+//                            else
+//                            {
+//                                map.replace("success",false);
+//                                map.replace("msg","Delete userinfo failed.");
+//                            }
+//                            break;
+//                        case "update":
+//                            //do update user
+//                            if(DBHelper.updateUser(userinfo))
+//                            {
+//                                map.replace("success",true);
+//                                map.replace("msg","Update userinfo successfully.");
+//                            }
+//                            else
+//                            {
+//                                map.replace("success",false);
+//                                map.replace("msg","Update userinfo failed.");
+//                            }
+//                            break;
+//                        default:
+//                            map.replace("success",false);
+//                            map.replace("msg","Opt parameters invalid.");
+//                    }
+//                }
+//
+//
+//            }
+//        }catch (Exception e)
+//        {
+//            map.replace("success",false);
+//            map.replace("msg","internal error.");
+//        }
+//        ModelAndView retView = new ModelAndView(retJson,map);
+//        return retView;
+//    }
+//
+//
+//    @RequestMapping("/getusers")
+//    public ModelAndView getUsers(HttpSession session)
+//    {
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("success", false);
+//        map.put("msg","");
+//        try
+//        {
+//            map.replace("success",true);
+//            map.replace("msg","Get users successfully");
+//            map.put("data",DBHelper.getUsers());
+//        }
+//        catch (Exception e)
+//        {
+//            map.replace("success",false);
+//            map.replace("msg","internal error.");
+//        }
+//        ModelAndView retView = new ModelAndView(new MappingJackson2JsonView(),map);
+//        return retView;
+//    }
+
+
+    @RequestMapping(value={"/usermgr"})
+    public void userMgr(User userinfo,HttpSession session,HttpServletResponse response)
+    {
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", false);
+        map.put("msg","");
+        response.setContentType("text/html;charset=utf-8");
+        try
+        {
+            Gson gson = new Gson();
+            PrintWriter pw = response.getWriter();
+
+            if(null == session.getAttribute("user"))   //未登录，
+            {
+                map.replace("success",false);
+                map.replace("msg","用户未登录，请先登录。");
+                response.getWriter().write(new Gson().toJson(map));
+                return;
+            }
+            if (userinfo != null) {
+                map.replace("success",false);
+                map.replace("msg","User information parameters error.");
+                pw.write(gson.toJson(map));
+            }
+            else {
+                //assert userinfo != null;
+                String operation = userinfo.getOpt();
+                if(operation.isEmpty())
+                {
+                    map.replace("success",false);
+                    map.replace("msg","Opt parameters error.");
+                    pw.write(gson.toJson(map));
+                    return;
+                }
+                else
+                {
+                    switch (operation)
+                    {
+                        case "add":
+                            // do add user
+                            if(DBHelper.addUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Add userinfo successfully.");
+
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Add userinfo failed.");
+                            }
+                            break;
+                        case "del":
+                            //do delete user
+                            if(DBHelper.deleteUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Delete userinfo successfully.");
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Delete userinfo failed.");
+                            }
+                            break;
+                        case "update":
+                            //do update user
+                            if(DBHelper.updateUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Update userinfo successfully.");
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Update userinfo failed.");
+                            }
+                            break;
+                        default:
+                            map.replace("success",false);
+                            map.replace("msg","Opt parameters invalid.");
+                    }
+                    pw.write(gson.toJson(map));
+                }
+
+
+            }
+        }catch (Exception e)
+        {
+            map.replace("success",false);
+            map.replace("msg","internal error.");
+            try {
+                response.getWriter().write(new Gson().toJson(map));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+
+    @RequestMapping("/getusers")
+    public void getUsers(HttpSession session,HttpServletResponse response)
+    {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", false);
+        map.put("msg","");
+        response.setContentType("text/html;charset=utf-8");
+        try
+        {
+            if(null == session.getAttribute("user"))   //未登录，
+            {
+                map.replace("success",false);
+                map.replace("msg","用户未登录，请先登录。");
+                response.getWriter().write(new Gson().toJson(map));
+                return;
+            }
+            map.replace("success",true);
+            map.replace("msg","Get users successfully");
+            map.put("data",DBHelper.getUsers());
+            response.getWriter().write(new Gson().toJson(map));
+        }
+        catch (Exception e)
+        {
+            map.replace("success",false);
+            map.replace("msg","internal error.");
+            try {
+                response.getWriter().write(new Gson().toJson(map));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
 }

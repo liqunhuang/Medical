@@ -8,4 +8,6 @@
 
     <description:default-servlet-handler></description:default-servlet-handler>
     <description:annotation-driven></description:annotation-driven>
+<!--    <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">-->
+<!--    </bean>-->
 </beans>

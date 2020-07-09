@@ -89,6 +89,24 @@ public class User {
         this.ext = ext;
     }
 
+    public String getOpt() {
+        return opt;
+    }
+
+    public void setOpt(String opt) {
+        this.opt = opt;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
     private String username;
     private String password;
     private String sex;
@@ -99,6 +117,7 @@ public class User {
     private String photo;
     private String right;
     private String ext;
+    private String opt;
 
 
 }
