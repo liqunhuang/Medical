@@ -5,6 +5,7 @@ import dao.DBHelper;
 import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
@@ -148,111 +149,113 @@ public class UserController {
         }
     }
 
-//    @RequestMapping(value={"/usermgr"})
-//    public ModelAndView userMgr(User userinfo,HttpSession session)
-//    {
-//        boolean succ = false;
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("success", succ);
-//        map.put("msg","");
-//        MappingJackson2JsonView retJson = new MappingJackson2JsonView();
-//        try
-//        {
-//            if (userinfo != null) {
-//                map.replace("success",false);
-//                map.replace("msg","User information parameters error.");
-//            } else {
-//                //assert userinfo != null;
-//                String operation = userinfo.getOpt();
-//                if(operation.isEmpty())
-//                {
-//                    map.replace("success",false);
-//                    map.replace("msg","Opt parameters error.");
-//                }
-//                else
-//                {
-//                    switch (operation)
-//                    {
-//                        case "add":
-//                            // do add user
-//                            if(DBHelper.addUser(userinfo))
-//                            {
-//                                map.replace("success",true);
-//                                map.replace("msg","Add userinfo successfully.");
-//                            }
-//                            else
-//                            {
-//                                map.replace("success",false);
-//                                map.replace("msg","Add userinfo failed.");
-//                            }
-//                            break;
-//                        case "del":
-//                            //do delete user
-//                            if(DBHelper.deleteUser(userinfo))
-//                            {
-//                                map.replace("success",true);
-//                                map.replace("msg","Delete userinfo successfully.");
-//                            }
-//                            else
-//                            {
-//                                map.replace("success",false);
-//                                map.replace("msg","Delete userinfo failed.");
-//                            }
-//                            break;
-//                        case "update":
-//                            //do update user
-//                            if(DBHelper.updateUser(userinfo))
-//                            {
-//                                map.replace("success",true);
-//                                map.replace("msg","Update userinfo successfully.");
-//                            }
-//                            else
-//                            {
-//                                map.replace("success",false);
-//                                map.replace("msg","Update userinfo failed.");
-//                            }
-//                            break;
-//                        default:
-//                            map.replace("success",false);
-//                            map.replace("msg","Opt parameters invalid.");
-//                    }
-//                }
-//
-//
-//            }
-//        }catch (Exception e)
-//        {
-//            map.replace("success",false);
-//            map.replace("msg","internal error.");
-//        }
-//        ModelAndView retView = new ModelAndView(retJson,map);
-//        return retView;
-//    }
-//
-//
-//    @RequestMapping("/getusers")
-//    public ModelAndView getUsers(HttpSession session)
-//    {
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("success", false);
-//        map.put("msg","");
-//        try
-//        {
-//            map.replace("success",true);
-//            map.replace("msg","Get users successfully");
-//            map.put("data",DBHelper.getUsers());
-//        }
-//        catch (Exception e)
-//        {
-//            map.replace("success",false);
-//            map.replace("msg","internal error.");
-//        }
-//        ModelAndView retView = new ModelAndView(new MappingJackson2JsonView(),map);
-//        return retView;
-//    }
+    @RequestMapping(value={"/usermgr"})
+    @ResponseBody
+    public ModelAndView userMgr(User userinfo,HttpSession session)
+    {
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", false);
+        map.put("msg","");
+        MappingJackson2JsonView retJson = new MappingJackson2JsonView();
+        try
+        {
+            if (userinfo == null) {
+                map.replace("success",false);
+                map.replace("msg","User information parameters error.");
+            } else {
+                //assert userinfo != null;
+                String operation = userinfo.getOpt();
+                if(operation.isEmpty())
+                {
+                    map.replace("success",false);
+                    map.replace("msg","Opt parameters error.");
+                }
+                else
+                {
+                    switch (operation)
+                    {
+                        case "add":
+                            // do add user
+                            if(DBHelper.addUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Add userinfo successfully.");
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Add userinfo failed.");
+                            }
+                            break;
+                        case "del":
+                            //do delete user
+                            if(DBHelper.deleteUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Delete userinfo successfully.");
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Delete userinfo failed.");
+                            }
+                            break;
+                        case "update":
+                            //do update user
+                            if(DBHelper.updateUser(userinfo))
+                            {
+                                map.replace("success",true);
+                                map.replace("msg","Update userinfo successfully.");
+                            }
+                            else
+                            {
+                                map.replace("success",false);
+                                map.replace("msg","Update userinfo failed.");
+                            }
+                            break;
+                        default:
+                            map.replace("success",false);
+                            map.replace("msg","Opt parameters invalid.");
+                    }
+                }
 
 
+            }
+        }catch (Exception e)
+        {
+            map.replace("success",false);
+            map.replace("msg","internal error.");
+        }
+        ModelAndView retView = new ModelAndView(retJson,map);
+        return retView;
+    }
+
+
+    @RequestMapping("/getusers")
+    @ResponseBody
+    public ModelAndView getUsers(User user,HttpSession session)
+    {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", false);
+        map.put("msg","");
+        try
+        {
+            map.replace("success",true);
+            map.replace("msg","Get users successfully");
+            map.put("data",DBHelper.getUsers());
+        }
+        catch (Exception e)
+        {
+            map.replace("success",false);
+            map.replace("msg","internal error.");
+        }
+        ModelAndView retView = new ModelAndView(new MappingJackson2JsonView(),map);
+        return retView;
+    }
+
+//old version
+/*
     @RequestMapping(value={"/usermgr"})
     public void userMgr(User userinfo,HttpSession session,HttpServletResponse response)
     {
@@ -388,5 +391,7 @@ public class UserController {
         }
 
     }
+
+ */
 
 }
