@@ -34,6 +34,8 @@ public class UserController {
     @RequestMapping(value = {"/login"})
     public void login(User user, HttpSession session, HttpServletResponse response)
     {
+        response.setHeader("Access-Control-Allow-Credentials", "true");       // 是否支持cookie跨域
+        response.setHeader("Access-Control-Allow-Origin","*");
         Hashtable ht = new Hashtable();
         ht.put("success",false);
         ht.put("msg","Login failed!");
@@ -159,67 +161,64 @@ public class UserController {
         MappingJackson2JsonView retJson = new MappingJackson2JsonView();
         try
         {
-            if (userinfo == null) {
+//            if(null == session.getAttribute("user"))   //未登录，
+//            {
+//                map.replace("success",false);
+//                map.replace("msg","用户未登录，请先登录。");
+//
+//            }
+            if(false)
+            {}
+            else
+            {
+                if (userinfo == null) {
                 map.replace("success",false);
                 map.replace("msg","User information parameters error.");
             } else {
                 //assert userinfo != null;
                 String operation = userinfo.getOpt();
-                if(operation.isEmpty())
-                {
-                    map.replace("success",false);
-                    map.replace("msg","Opt parameters error.");
-                }
-                else
-                {
-                    switch (operation)
-                    {
+                if (operation.isEmpty()) {
+                    map.replace("success", false);
+                    map.replace("msg", "Opt parameters error.");
+                } else {
+                    switch (operation) {
                         case "add":
                             // do add user
-                            if(DBHelper.addUser(userinfo))
-                            {
-                                map.replace("success",true);
-                                map.replace("msg","Add userinfo successfully.");
-                            }
-                            else
-                            {
-                                map.replace("success",false);
-                                map.replace("msg","Add userinfo failed.");
+                            if (DBHelper.addUser(userinfo)) {
+                                map.replace("success", true);
+                                map.replace("msg", "Add userinfo successfully.");
+                            } else {
+                                map.replace("success", false);
+                                map.replace("msg", "Add userinfo failed.");
                             }
                             break;
                         case "del":
                             //do delete user
-                            if(DBHelper.deleteUser(userinfo))
-                            {
-                                map.replace("success",true);
-                                map.replace("msg","Delete userinfo successfully.");
-                            }
-                            else
-                            {
-                                map.replace("success",false);
-                                map.replace("msg","Delete userinfo failed.");
+                            if (DBHelper.deleteUser(userinfo)) {
+                                map.replace("success", true);
+                                map.replace("msg", "Delete userinfo successfully.");
+                            } else {
+                                map.replace("success", false);
+                                map.replace("msg", "Delete userinfo failed.");
                             }
                             break;
                         case "update":
                             //do update user
-                            if(DBHelper.updateUser(userinfo))
-                            {
-                                map.replace("success",true);
-                                map.replace("msg","Update userinfo successfully.");
-                            }
-                            else
-                            {
-                                map.replace("success",false);
-                                map.replace("msg","Update userinfo failed.");
+                            if (DBHelper.updateUser(userinfo)) {
+                                map.replace("success", true);
+                                map.replace("msg", "Update userinfo successfully.");
+                            } else {
+                                map.replace("success", false);
+                                map.replace("msg", "Update userinfo failed.");
                             }
                             break;
                         default:
-                            map.replace("success",false);
-                            map.replace("msg","Opt parameters invalid.");
+                            map.replace("success", false);
+                            map.replace("msg", "Opt parameters invalid.");
                     }
                 }
 
-
+            }
             }
         }catch (Exception e)
         {
@@ -233,17 +232,30 @@ public class UserController {
 
     @RequestMapping("/getusers")
     @ResponseBody
-    public ModelAndView getUsers(User user,HttpSession session)
+    public ModelAndView getUsers(User user,HttpSession session,HttpServletResponse response)
     {
-
+        response.setHeader("Access-Control-Allow-Credentials", "true");       // 是否支持cookie跨域
+        response.setHeader("Access-Control-Allow-Origin","*");
         Map<String, Object> map = new HashMap<>();
         map.put("success", false);
         map.put("msg","");
         try
         {
-            map.replace("success",true);
-            map.replace("msg","Get users successfully");
-            map.put("data",DBHelper.getUsers());
+//            if(null == session.getAttribute("user"))   //未登录，
+//            {
+//                map.replace("success",false);
+//                map.replace("msg","用户未登录，请先登录。");
+//
+//            }
+            if(false)
+            {
+
+            }
+            else {
+                map.replace("success", true);
+                map.replace("msg", "Get users successfully");
+                map.put("data", DBHelper.getUsers());
+            }
         }
         catch (Exception e)
         {
