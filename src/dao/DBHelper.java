@@ -15,8 +15,8 @@ import java.util.List;
  * Project: Medical
  **/
 public class DBHelper {
-    private static String dbuser="root";
-    private static String dbpass="huanglq";
+    private static String dbuser="test";
+    private static String dbpass="test";
     private static String dbDriver="com.mysql.cj.jdbc.Driver";
     private static String dbConnectStr="jdbc:mysql://localhost:3306/medical?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
     public static User getUser(String username)
