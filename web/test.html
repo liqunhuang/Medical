@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://localhost:8080/Medical/jquery.js"></script>
+</head>
+<body>
+<script>
+    $(document).ready(function () {
+        $("#doget").click(function () {
+           $.ajax({
+               url:'http://localhost:8080/Medical/ruser',
+               method:'get',
+               success:function (data) {
+                    $('#dataspan').text(JSON.stringify(data));
+               }
+           });
+        });
+
+        $("#dopost").click(function () {
+            $.ajax({
+                url:'http://localhost:8080/Medical/ruser',
+                method:'post',
+                success:function (data) {
+                    $('#dataspan').text(JSON.stringify(data));
+                }
+            });
+        });
+
+        $("#doput").click(function () {
+            $.ajax({
+                url:'http://localhost:8080/Medical/ruser',
+                method:'put',
+                success:function (data) {
+                    $('#dataspan').text(JSON.stringify(data));
+                }
+            });
+        });
+
+        $("#dodelete").click(function () {
+            $.ajax({
+                url:'http://localhost:8080/Medical/ruser',
+                method:'delete',
+                success:function (data) {
+                    $('#dataspan').text(JSON.stringify(data));
+                }
+            });
+        });
+    });
+</script>
+<button id="doget" value="GET">GET</button>
+<button id="dopost" value="POST">POST</button>
+<button id="doput" value="PUT">PUT</button>
+<button id="dodelete" value="DELETE">DELETE</button>
+
+<div id="dataspan"></div>
+
+</body>
+</html>

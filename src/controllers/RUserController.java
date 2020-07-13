@@ -70,8 +70,6 @@ public class RUserController {
         ModelAndView retView = new ModelAndView(retJson,map);
         return retView;
     }
-
-
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ModelAndView userUpdate(User userinfo,HttpSession session)
@@ -117,8 +115,6 @@ public class RUserController {
         ModelAndView retView = new ModelAndView(retJson,map);
         return retView;
     }
-
-
     @ResponseBody
     @RequestMapping(method = RequestMethod.DELETE)
     public ModelAndView userDelete(User userinfo,HttpSession session)
@@ -162,8 +158,6 @@ public class RUserController {
         ModelAndView retView = new ModelAndView(retJson,map);
         return retView;
     }
-
-
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getUsers(User user,HttpSession session,HttpServletResponse response)
@@ -199,7 +193,5 @@ public class RUserController {
         ModelAndView retView = new ModelAndView(new MappingJackson2JsonView(),map);
         return retView;
     }
-
-
 
 }
